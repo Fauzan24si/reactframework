@@ -2,10 +2,20 @@ import { useState } from "react";
 import frameworkData from "./framework.json";
 
 export default function FrameworkList() {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedTag, setSelectedTag] = useState("");
+    const [dataForm, setDataForm] = useState({
+        searchTerm: "",
+        selectedTag: "",
+    });
 
-    const _searchTerm = searchTerm.toLowerCase();
+    const handleChange = (evt) => {
+        const { name, value } = evt.target;
+        setDataForm({
+            ...dataForm,
+            [name]: value,
+        });
+    };
+
+    const _searchTerm = dataForm.searchTerm.toLowerCase();
     const filteredFrameworks = frameworkData.filter((framework) => {
     const matchesSearch =
       framework.name
@@ -15,7 +25,7 @@ export default function FrameworkList() {
 				.toLowerCase()
 				.includes(_searchTerm);
 
-    const matchesTag = selectedTag ? framework.tags.includes(selectedTag) : true;
+    const matchesTag = dataForm.selectedTag ? framework.tags.includes(dataForm.selectedTag) : true;
     return matchesSearch && matchesTag;
   });
 
@@ -29,16 +39,16 @@ export default function FrameworkList() {
             <input
                 type="text"
                 name="searchTerm"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
+                value={dataForm.searchTerm}
+                onChange={handleChange}
                 placeholder="Search framework..."
                 className="w-full p-2 border border-gray-300 rounded mb-4"
             />
 
             <select
                 name="selectedTag"
-                value={selectedTag}
-                onChange={(event) => setSelectedTag(event.target.value)}
+                value={dataForm.selectedTag}
+                onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded mb-4"
             >
                 <option value="">All Tags</option>
