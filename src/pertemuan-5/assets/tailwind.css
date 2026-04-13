@@ -261,7 +261,8 @@
 
 #notification-icon,
 #chart-icon,
-#settings-icon {
+#settings-icon,
+#theme-toggle {
     position: relative;
     display: flex;
     align-items: center;
@@ -282,6 +283,11 @@
 #chart-icon {
     background: #e7f6ff;
     color: #06b6d4;
+}
+
+#theme-toggle {
+    background: #f1f5f9;
+    color: #475569;
 }
 
 #settings-icon {
@@ -533,3 +539,105 @@
     }
 }
 
+/* ========================================================
+   IMPROVISASI 4: DARK MODE SYSTEM OVERRIDES
+======================================================== */
+.dark {
+    --color-latar: #0f172a;
+    --color-teks: #e2e8f0;
+    --color-garis: #334155;
+}
+
+.dark body {
+    background: #0f172a;
+    color: #f1f5f9;
+}
+
+/* Sidebar Dark Overrides */
+.dark #sidebar {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+.dark #logo-title {
+    color: #f8fafc;
+}
+.dark #menu-1 {
+    color: #f8fafc;
+}
+.dark #menu-2, .dark #menu-3 {
+    color: #cbd5e1;
+}
+.dark #menu-1:hover, .dark #menu-2:hover, .dark #menu-3:hover {
+    background: #334155;
+    color: #f8fafc;
+}
+.dark #add-menu-button {
+    background: #334155;
+    color: #f1f5f9;
+}
+
+/* Header Dark Overrides */
+.dark #search-input {
+    background: #1e293b;
+    color: #f1f5f9;
+    box-shadow: none;
+    border: 1px solid #334155;
+}
+.dark #search-input::placeholder {
+    color: #64748b;
+}
+.dark #notification-icon, .dark #chart-icon, .dark #settings-icon, .dark #theme-toggle {
+    background: #1e293b;
+}
+
+.dark #profile-text, .dark #profile-text b {
+    color: #f8fafc;
+}
+.dark .bg-white {
+    background-color: #1e293b !important;
+}
+.dark .text-gray-400 { color: #94a3b8 !important; }
+.dark .text-gray-600 { color: #cbd5e1 !important; }
+.dark .hover\:bg-gray-50:hover { background-color: #334155 !important; }
+.dark .border-gray-50 { border-color: #334155 !important; }
+
+/* PageHeader Dark Overrides */
+.dark #page-title {
+    color: #f8fafc;
+}
+.dark #breadcrumb-current {
+    color: #f8fafc;
+}
+.dark #breadcrumb-home, .dark #breadcrumb-separator {
+    color: #64748b;
+}
+
+/* Dashboard Analytics Module Dark Overrides */
+.dark #dashboard-orders,
+.dark #dashboard-delivered,
+.dark #dashboard-canceled,
+.dark #dashboard-revenue {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: none;
+}
+.dark #orders-count,
+.dark #delivered-count,
+.dark #canceled-count,
+.dark #revenue-amount {
+    color: #f8fafc;
+}
+
+/* Recent Orders Component Override */
+.dark .bg-gray-50\/50, .dark .bg-gray-50 {
+    background-color: #0f172a !important;
+}
+.dark .text-gray-800, .dark .text-gray-900 { color: #f8fafc !important; }
+.dark .text-gray-500 { color: #94a3b8 !important; }
+.dark .border-gray-100 { border-color: #334155 !important; }
+.dark .hover\:bg-blue-50\/40:hover { background-color: rgba(51, 65, 85, 0.4) !important; }
+.dark .bg-white.border-gray-200 { 
+    background-color: #1e293b !important; 
+    border-color: #334155 !important;
+}
