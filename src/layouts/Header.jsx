@@ -7,17 +7,29 @@ export default function Header() {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [isDarkMode, setIsDarkMode] = useState(false);
 
-	// Load status dark mode saat pertama kali komponen dirender
+	// Load status dark mode dari localStorage saat pertama kali komponen dirender
 	useEffect(() => {
-		if (document.documentElement.classList.contains('dark')) {
+		const savedTheme = localStorage.getItem('theme');
+		if (savedTheme === 'dark' || (!savedTheme && document.documentElement.classList.contains('dark'))) {
+			document.documentElement.classList.add('dark');
 			setIsDarkMode(true);
+		} else {
+			document.documentElement.classList.remove('dark');
+			setIsDarkMode(false);
 		}
 	}, []);
 
-	// Fungsi merubah status dark mode dan menambahkan class di root html
+	// Fungsi merubah status dark mode, class di root html, dan menyimpan di localStorage
 	const toggleTheme = () => {
-		setIsDarkMode(!isDarkMode);
-		document.documentElement.classList.toggle('dark');
+		if (isDarkMode) {
+			document.documentElement.classList.remove('dark');
+			localStorage.setItem('theme', 'light');
+			setIsDarkMode(false);
+		} else {
+			document.documentElement.classList.add('dark');
+			localStorage.setItem('theme', 'dark');
+			setIsDarkMode(true);
+		}
 	};
 
 	return (
