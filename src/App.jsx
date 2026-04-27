@@ -10,8 +10,7 @@ const AuthLayout = React.lazy(() => import("./layouts/AuthLayout"))
 const Login = React.lazy(() => import("./pages/auth/Login"))
 const Register = React.lazy(() => import("./pages/auth/Register"))
 const Forgot = React.lazy(() => import("./pages/auth/Forgot"))
-import Loading from "./components/Loading";
-
+const Loading = React.lazy(() => import("./components/Loading"))
 function App() {
     return (
         <Suspense fallback={<Loading />}>
