@@ -1,38 +1,40 @@
 import { Routes, Route } from "react-router-dom";
-import Sidebar from "./layouts/Sidebar";
-import Header from "./layouts/Header";
-import Dashboard from "./pages/Dashboard";
-import Orders from "./pages/Orders";
-import Customers from "./pages/Customers";
-import NotFound from "./pages/NotFound";
-import ErrorPage from "./components/ErrorPage";
+import React, { Suspense } from "react";
+const MainLayout = React.lazy(() => import("./layouts/MainLayout"))
+const Dashboard = React.lazy(() => import("./pages/main/Dashboard"))
+const Orders = React.lazy(() => import("./pages/main/Orders"))
+const Customers = React.lazy(() => import("./pages/main/Customers"))
+const NotFound = React.lazy(() => import("./pages/main/NotFound"))
+const ErrorPage = React.lazy(() => import("./components/ErrorPage"))
+const AuthLayout = React.lazy(() => import("./layouts/AuthLayout"))
+const Login = React.lazy(() => import("./pages/auth/Login"))
+const Register = React.lazy(() => import("./pages/auth/Register"))
+const Forgot = React.lazy(() => import("./pages/auth/Forgot"))
+import Loading from "./components/Loading";
 
 function App() {
     return (
-        <div className="min-h-screen bg-latar font-poppins text-teks">
-            <div className="flex min-h-screen flex-col lg:flex-row">
-                <Sidebar />
-                <main className="flex-1 p-4 md:p-6 xl:p-8">
-                    <Header />
-                    <div className="mt-6 space-y-6">
-                        <Routes>
-                            {/* Halaman Utama */}
-                            <Route path="/"          element={<Dashboard />} />
-                            <Route path="/orders"    element={<Orders />} />
-                            <Route path="/customers" element={<Customers />} />
+        <Suspense fallback={<Loading />}>
+                    <Routes>
+            <Route path="/" element={<MainLayout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="customers" element={<Customers />} />
 
-                            {/* Halaman Error */}
-                            <Route path="/error/400" element={<ErrorPage errorCode={400} />} />
-                            <Route path="/error/401" element={<ErrorPage errorCode={401} />} />
-                            <Route path="/error/403" element={<ErrorPage errorCode={403} />} />
+                <Route path="error/400" element={<ErrorPage errorCode={400} />} />
+                <Route path="error/401" element={<ErrorPage errorCode={401} />} />
+                <Route path="error/403" element={<ErrorPage errorCode={403} />} />
+            </Route>
 
-                            {/* 404 — catch-all */}
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
-                    </div>
-                </main>
-            </div>
-        </div>
+                <Route element={<AuthLayout/>}>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register/>} />
+                <Route path="/forgot" element={<Forgot/>} />
+                </Route>
+
+            <Route path="*" element={<NotFound />} />
+        </Routes>
+        </Suspense>
     );
 }
 

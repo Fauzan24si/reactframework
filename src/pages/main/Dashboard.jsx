@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaShoppingCart, FaTruck, FaBan, FaDollarSign, FaCheckCircle, FaClock } from "react-icons/fa";
-import PageHeader from "../components/PageHeader";
+import PageHeader from "../../components/PageHeader";
 
 export default function Dashboard() {
     const recentOrders = [

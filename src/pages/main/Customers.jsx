@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaPlus, FaTimes } from "react-icons/fa";
-import PageHeader from "../components/PageHeader";
-import customersData from "../data/customersData";
+import PageHeader from "../../components/PageHeader";
+import customersData from "../../data/customersData";
 
 const loyaltyStyle = {
     Gold:   "bg-yellow-100 text-yellow-700 border border-yellow-200",
