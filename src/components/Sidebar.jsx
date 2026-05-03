@@ -1,91 +1,265 @@
-import { FaThLarge, FaList, FaHeadphonesAlt, FaPlus, FaExclamationCircle, FaLock, FaBan } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { FiGrid, FiUser, FiBarChart2, FiShoppingCart, FiBox, FiTrendingUp, FiMessageSquare, FiSettings, FiStar, FiClock, FiLogOut } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
-// Fungsi menuClass menerima props isActive dari NavLink
-const menuClass = ({ isActive }) =>
-    `flex cursor-pointer items-center rounded-xl p-4 space-x-2 font-medium text-decoration-none
-    ${isActive
-        ? "text-hijau bg-green-200 font-extrabold"
-        : "text-gray-600 hover:text-hijau hover:bg-green-200 hover:font-extrabold"
-    }`;
+const sidebarStyles = `
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: #fff;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+    box-shadow: 1px 0 3px rgba(0,0,0,0.03);
+    z-index: 30;
+  }
 
-export default function Sidebar() {
-    return (
-        <div id="sidebar">
-            {/* Logo */}
-            <div id="sidebar-logo">
-                <span id="logo-title">
-                    Sapi Restaurant <b id="logo-dot"></b>
-                </span>
-                <span id="logo-subtitle">Modern Admin Dashboard</span>
-            </div>
+  .sidebar-logo {
+    padding: 20px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #f1f5f9;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    flex-shrink: 0;
+  }
 
-            {/* List Menu */}
-            <div id="sidebar-menu">
-                <ul id="menu-list">
-                    {/* Menu Utama */}
-                    <li>
-                        <NavLink id="menu-1" to="/" end className={menuClass}>
-                            <FaThLarge />
-                            <span>Dashboard</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink id="menu-2" to="/orders" className={menuClass}>
-                            <FaList />
-                            <span>Orders</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink id="menu-3" to="/customers" className={menuClass}>
-                            <FaHeadphonesAlt />
-                            <span>Customers</span>
-                        </NavLink>
-                    </li>
+  .sidebar-logo-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 6px rgba(37,99,235,0.25);
+    flex-shrink: 0;
+  }
 
-                    {/* Separator */}
-                    <li>
-                        <div id="menu-separator">
-                            <span>Error Pages</span>
-                        </div>
-                    </li>
+  .sidebar-logo-icon span {
+    font-size: 13px;
+    color: #fff;
+    font-weight: 800;
+    line-height: 1;
+  }
 
-                    {/* Menu Error Pages */}
-                    <li>
-                        <NavLink id="menu-4" to="/error/400" className={menuClass}>
-                            <FaExclamationCircle />
-                            <span>Error 400</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink id="menu-5" to="/error/401" className={menuClass}>
-                            <FaLock />
-                            <span>Error 401</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink id="menu-6" to="/error/403" className={menuClass}>
-                            <FaBan />
-                            <span>Error 403</span>
-                        </NavLink>
-                    </li>
-                </ul>
-            </div>
+  .sidebar-logo-text {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1e293b;
+    letter-spacing: -0.3px;
+    line-height: 1;
+  }
 
-            {/* Footer */}
-            <div id="sidebar-footer">
-                <div id="footer-card">
-                    <div id="footer-text">
-                        <span>Please organize your menus through button below!</span>
-                        <div id="add-menu-button">
-                            <FaPlus style={{ fontSize: '0.7em' }} /> <span>Add Menus</span>
-                        </div>
-                    </div>
-                    <img id="footer-avatar" src="/img/wahyu.png" alt="Footer avatar" />
-                </div>
-                <span id="footer-brand">Sedap Restaurant Admin Dashboard</span>
-                <p id="footer-copyright">&copy; 2025 All Right Reserved</p>
-            </div>
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #94a3b8;
+    padding: 0 12px;
+    margin: 0 0 8px 0;
+    line-height: 1;
+  }
+
+  .sidebar-label.mt {
+    margin-top: 24px;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin-bottom: 2px;
+    text-decoration: none;
+  }
+
+  .sidebar-item:hover {
+    background: #f8fafc;
+  }
+
+  .sidebar-item:hover .si-icon {
+    color: #3b82f6;
+  }
+
+  .sidebar-item:hover .si-text {
+    color: #1e293b;
+  }
+
+  .sidebar-item.active {
+    background: #eff6ff;
+  }
+
+  .sidebar-item.active .si-icon {
+    color: #2563eb;
+  }
+
+  .sidebar-item.active .si-text {
+    color: #1d4ed8;
+    font-weight: 600;
+  }
+
+  .si-icon {
+    width: 20px;
+    height: 20px;
+    color: #94a3b8;
+    transition: color 0.15s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .si-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .si-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    margin-left: 10px;
+    line-height: 1;
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+
+  .si-badge {
+    margin-left: auto;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 5px;
+    line-height: 1.4;
+  }
+
+  .sidebar-footer {
+    padding: 12px;
+    border-top: 1px solid #f1f5f9;
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    flex-shrink: 0;
+  }
+
+  .sidebar-signout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 10px;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .sidebar-signout:hover {
+    background: #fff1f2;
+    color: #e11d48;
+    border-color: #fecdd3;
+  }
+
+  .sidebar-signout svg {
+    width: 17px;
+    height: 17px;
+    transition: transform 0.2s;
+  }
+
+  .sidebar-signout:hover svg {
+    transform: translateX(-2px);
+  }
+`;
+
+const Sidebar = () => {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <style>{sidebarStyles}</style>
+      <aside className="sidebar">
+        <div className="sidebar-logo">
+          <span className="sidebar-logo-text">Furniture Admin</span>
         </div>
-    );
-}
+
+        <nav className="sidebar-nav">
+          <p className="sidebar-label">Menu</p>
+
+          <div className="sidebar-item active">
+            <span className="si-icon"><FiGrid /></span>
+            <span className="si-text">Dashboard</span>
+          </div>
+          <div className="sidebar-item">
+            <span className="si-icon"><FiUser /></span>
+            <span className="si-text">Profile</span>
+          </div>
+          <div className="sidebar-item">
+            <span className="si-icon"><FiBarChart2 /></span>
+            <span className="si-text">Leaderboard</span>
+          </div>
+          <div className="sidebar-item">
+            <span className="si-icon"><FiShoppingCart /></span>
+            <span className="si-text">Order</span>
+            <span className="si-badge">3</span>
+          </div>
+          <div className="sidebar-item">
+            <span className="si-icon"><FiBox /></span>
+            <span className="si-text">Product</span>
+          </div>
+          <div className="sidebar-item">
+            <span className="si-icon"><FiTrendingUp /></span>
+            <span className="si-text">Sales Report</span>
+          </div>
+          <div className="sidebar-item">
+            <span className="si-icon"><FiMessageSquare /></span>
+            <span className="si-text">Message</span>
+          </div>
+
+          <p className="sidebar-label mt">Others</p>
+
+          <div className="sidebar-item">
+            <span className="si-icon"><FiSettings /></span>
+            <span className="si-text">Settings</span>
+          </div>
+          <div className="sidebar-item">
+            <span className="si-icon"><FiStar /></span>
+            <span className="si-text">Favourite</span>
+          </div>
+          <div className="sidebar-item">
+            <span className="si-icon"><FiClock /></span>
+            <span className="si-text">History</span>
+          </div>
+        </nav>
+
+        <div className="sidebar-footer">
+          <button className="sidebar-signout" onClick={() => navigate('/login')}>
+            <FiLogOut />
+            <span>Signout</span>
+          </button>
+        </div>
+      </aside>
+    </>
+  );
+};
+
+export default Sidebar;

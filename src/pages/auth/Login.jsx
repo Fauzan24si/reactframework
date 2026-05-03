@@ -1,122 +1,162 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
-import { ImSpinner2 } from "react-icons/im";
-import { BsFillExclamationDiamondFill } from "react-icons/bs";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-export default function Login() {
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState("")
-    const [dataForm, setDataForm] = useState({
-        email: "",
-        password: "",
-    })
+const Login = () => {
+  const [dataForm, setDataForm] = useState({
+    email: 'emilys',
+    password: 'emilyspass'
+  });
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-    const handleChange = (evt) => {
-        const { name, value } = evt.target
-        setDataForm({
-            ...dataForm,
-            [name]: value,
-        })
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        setLoading(true)
-        setError(false)
+    setLoading(true)
+    setError(false)
 
     axios
-            .post("https://dummyjson.com/auth/login", {
-                username: dataForm.email,
-                password: dataForm.password,
-            })
-            .then((response) => {
-                // Jika status bukan 200, tampilkan pesan error
-                if (response.status !== 200) {
-                    setError(response.data.message);
-                    return; 
-                }
+      .post("https://dummyjson.com/user/login", {
+        username: dataForm.email,
+        password: dataForm.password,
+      })
+      .then((response) => {
+        // Jika status bukan 200, tampilkan pesan error
+        if (response.status !== 200) {
+          setError(response.data.message);
+          return; 
+        }
 
-                // Redirect ke dashboard jika login sukses
-                navigate("/");
-            })
-            .catch((err) => {
-                if (err.response) {
-                    setError(err.response.data.message || "An error occurred");
-                } else {
-                    setError(err.message || "An unknown error occurred");
-                }
-            })
-            .finally(() => {
-                setLoading(false); 
-            });
+        // Redirect ke dashboard jika login sukses
+        navigate("/admin/dashboard");
+      })
+      .catch((err) => {
+        if (err.response) {
+          setError(err.response.data.message || "An error occurred");
+        } else {
+          setError(err.message || "An unknown error occurred");
+        }
+      })
+      .finally(() => {
+        setLoading(false); 
+      });
+  }
 
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDataForm(prev => ({ ...prev, [name]: value }));
+  };
 
-    const errorInfo = error ? (
-		    <div className="bg-red-200 mb-5 p-5 text-sm font-light text-gray-600 rounded flex items-center">
-		        <BsFillExclamationDiamondFill className="text-red-600 me-2 text-lg" />
-		        {error}
-		    </div>
-		) : null
-
-    		const loadingInfo = loading ? (
-		    <div className="bg-gray-200 mb-5 p-5 text-sm rounded flex items-center">
-		        <ImSpinner2 className="me-2 animate-spin" />
-		        Mohon Tunggu...
-		    </div>
-		) : null
-
-    return (
-        <div>
-            <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
-                Welcome Back 👋
-            </h2>
-
-            {errorInfo}
-            {loadingInfo}
-
-            <form onSubmit={handleSubmit}>
-                <div className="mb-5">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Email Address
-                    </label>
-                    <input
-                        type="text"
-                        id="email"
-                        name="email"
-                        value={dataForm.email}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
-                            placeholder-gray-400"
-                        placeholder="you@example.com"
-                    />
-                </div>
-                <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Password
-                    </label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={dataForm.password}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
-                            placeholder-gray-400"
-                        placeholder="********"
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4
-                        rounded-lg transition duration-300"
-                >
-                    Login
-                </button>
-            </form>
+  return (
+    <div style={styles.card}>
+      <h2 style={styles.title}>Admin Login</h2>
+      <p style={styles.subtitle}>Sign in to access the dashboard</p>
+      
+      <form onSubmit={handleSubmit} style={styles.form}>
+        {error && <div style={styles.error}>{error}</div>}
+        
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>Username / Email</label>
+          <input 
+            type="text" 
+            name="email"
+            value={dataForm.email} 
+            onChange={handleChange} 
+            style={styles.input}
+            required
+          />
         </div>
-    )
-}
+        
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>Password</label>
+          <input 
+            type="password" 
+            name="password"
+            value={dataForm.password} 
+            onChange={handleChange} 
+            style={styles.input}
+            required
+          />
+        </div>
+        
+        <button type="submit" disabled={loading} style={styles.button}>
+          {loading ? 'Signing In...' : 'Sign In'}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+const styles = {
+  card: {
+    backgroundColor: '#fff',
+    padding: '40px',
+    borderRadius: '16px',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+    width: '100%',
+  },
+  title: {
+    fontSize: '24px',
+    fontWeight: '700',
+    marginBottom: '8px',
+    color: '#1f2937',
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: '14px',
+    color: '#6b7280',
+    marginBottom: '28px',
+    textAlign: 'center',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '18px',
+  },
+  inputGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6px',
+  },
+  label: {
+    fontSize: '14px',
+    fontWeight: '500',
+    color: '#374151',
+  },
+  input: {
+    padding: '12px 14px',
+    borderRadius: '10px',
+    border: '1px solid #e5e7eb',
+    fontSize: '14px',
+    fontFamily: 'inherit',
+    transition: 'border-color 0.2s, box-shadow 0.2s',
+    outline: 'none',
+  },
+  button: {
+    padding: '14px',
+    backgroundColor: '#054C73',
+    color: 'white',
+    border: 'none',
+    borderRadius: '10px',
+    fontSize: '15px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    marginTop: '8px',
+    transition: 'background-color 0.2s, transform 0.1s',
+    fontFamily: 'inherit',
+  },
+  error: {
+    backgroundColor: '#fef2f2',
+    color: '#dc2626',
+    padding: '12px',
+    borderRadius: '10px',
+    fontSize: '14px',
+    textAlign: 'center',
+    border: '1px solid #fecaca',
+  }
+};
+
+export default Login;
+
