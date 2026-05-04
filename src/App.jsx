@@ -9,6 +9,10 @@ import Loading from './components/Loading';
 const Home = React.lazy(() => import('./pages/main/Home'));
 const Login = React.lazy(() => import('./pages/auth/Login'));
 const Dashboard = React.lazy(() => import('./pages/main/Dashboard'));
+const CustomerDetail = React.lazy(() => import('./pages/main/CustomerDetail'));
+const UserDetail = React.lazy(() => import('./pages/main/UserDetail'));
+const Produk = React.lazy(() => import('./pages/main/Produk'));
+const ProductDetail = React.lazy(() => import('./pages/main/ProductDetail'));
 
 function App() {
   return (
@@ -24,6 +28,12 @@ function App() {
           </Route>
 
           <Route path="/admin/dashboard" element={<Dashboard />} />
+          
+          {/* Dynamic Routes */}
+          <Route path="/customers/:id" element={<CustomerDetail />} />
+          <Route path="/users/:abc" element={<UserDetail />} />
+          <Route path="/products" element={<Produk />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

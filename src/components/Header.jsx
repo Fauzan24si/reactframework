@@ -1,17 +1,20 @@
 import { FiUser, FiSearch, FiHeart, FiShoppingCart } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
     <header style={styles.header}>
       <div className="container" style={styles.container}>
         <div style={styles.logo}>
-          <h2>Furniture</h2>
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <h2>Furniture</h2>
+          </Link>
         </div>
         
         <nav style={styles.nav}>
           <ul style={styles.navList}>
-            <li><a href="#" style={{...styles.navLink, fontWeight: 600}}>Home</a></li>
-            <li><a href="#" style={styles.navLink}>Shop</a></li>
+            <li><Link to="/" style={{...styles.navLink, fontWeight: 600}}>Home</Link></li>
+            <li><Link to="/products" style={styles.navLink}>Shop</Link></li>
             <li><a href="#" style={styles.navLink}>About</a></li>
             <li><a href="#" style={styles.navLink}>Contact</a></li>
           </ul>
