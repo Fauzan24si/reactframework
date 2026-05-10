@@ -1,5 +1,5 @@
-import { FiGrid, FiUser, FiBarChart2, FiShoppingCart, FiBox, FiTrendingUp, FiMessageSquare, FiSettings, FiStar, FiClock, FiLogOut } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { FiGrid, FiUser, FiBox, FiTrendingUp, FiLogOut, FiUsers } from 'react-icons/fi';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 const sidebarStyles = `
   .sidebar {
@@ -205,50 +205,26 @@ const Sidebar = () => {
         <nav className="sidebar-nav">
           <p className="sidebar-label">Menu</p>
 
-          <div className="sidebar-item active">
+          <NavLink to="/admin/dashboard" end className={({ isActive }) => `sidebar-item${isActive ? ' active' : ''}`}>
             <span className="si-icon"><FiGrid /></span>
             <span className="si-text">Dashboard</span>
-          </div>
-          <div className="sidebar-item">
+          </NavLink>
+          <NavLink to="/users" className={({ isActive }) => `sidebar-item${isActive ? ' active' : ''}`}>
             <span className="si-icon"><FiUser /></span>
-            <span className="si-text">Profile</span>
-          </div>
-          <div className="sidebar-item">
-            <span className="si-icon"><FiBarChart2 /></span>
-            <span className="si-text">Leaderboard</span>
-          </div>
-          <div className="sidebar-item">
-            <span className="si-icon"><FiShoppingCart /></span>
-            <span className="si-text">Order</span>
-            <span className="si-badge">3</span>
-          </div>
-          <div className="sidebar-item">
+            <span className="si-text">Users</span>
+          </NavLink>
+          <NavLink to="/products" className={({ isActive }) => `sidebar-item${isActive ? ' active' : ''}`}>
             <span className="si-icon"><FiBox /></span>
             <span className="si-text">Product</span>
-          </div>
-          <div className="sidebar-item">
+          </NavLink>
+          <NavLink to="/customers/1" className={({ isActive }) => `sidebar-item${isActive ? ' active' : ''}`}>
+            <span className="si-icon"><FiUsers /></span>
+            <span className="si-text">Customer</span>
+          </NavLink>
+          <NavLink to="/sales-report" className={({ isActive }) => `sidebar-item${isActive ? ' active' : ''}`}>
             <span className="si-icon"><FiTrendingUp /></span>
             <span className="si-text">Sales Report</span>
-          </div>
-          <div className="sidebar-item">
-            <span className="si-icon"><FiMessageSquare /></span>
-            <span className="si-text">Message</span>
-          </div>
-
-          <p className="sidebar-label mt">Others</p>
-
-          <div className="sidebar-item">
-            <span className="si-icon"><FiSettings /></span>
-            <span className="si-text">Settings</span>
-          </div>
-          <div className="sidebar-item">
-            <span className="si-icon"><FiStar /></span>
-            <span className="si-text">Favourite</span>
-          </div>
-          <div className="sidebar-item">
-            <span className="si-icon"><FiClock /></span>
-            <span className="si-text">History</span>
-          </div>
+          </NavLink>
         </nav>
 
         <div className="sidebar-footer">

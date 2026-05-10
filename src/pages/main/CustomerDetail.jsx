@@ -4,26 +4,35 @@ function CustomerDetail() {
   const { id } = useParams();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">
-            Customer Detail
-          </h1>
-          <div className="border-t pt-4">
-            <p className="text-lg text-gray-600">
-              Customer ID: <span className="font-semibold text-blue-600">{id}</span>
-            </p>
-            <div className="mt-6 space-y-3">
-              <p className="text-gray-700">Nama: Customer {id}</p>
-              <p className="text-gray-700">Email: customer{id}@example.com</p>
-              <p className="text-gray-700">Status: Active</p>
-            </div>
-          </div>
+    <>
+      <h1 className="admin-page-title">Customer Detail</h1>
+      <p className="admin-page-subtitle">Informasi detail customer</p>
+
+      <div style={styles.card}>
+        <p style={styles.idRow}>
+          Customer ID: <span style={{ color: '#054C73', fontWeight: 700 }}>{id}</span>
+        </p>
+        <div style={styles.list}>
+          <p style={styles.item}>Nama: Customer {id}</p>
+          <p style={styles.item}>Email: customer{id}@example.com</p>
+          <p style={styles.item}>Status: Active</p>
         </div>
       </div>
-    </div>
+    </>
   );
 }
+
+const styles = {
+  card: {
+    background: '#fff',
+    borderRadius: '16px',
+    border: '1px solid #f3f4f6',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+    padding: '28px',
+  },
+  idRow: { fontSize: '16px', color: '#6b7280', margin: '0 0 20px', paddingBottom: '16px', borderBottom: '1px solid #f3f4f6' },
+  list: { display: 'flex', flexDirection: 'column', gap: '12px' },
+  item: { fontSize: '14px', color: '#374151', margin: 0 },
+};
 
 export default CustomerDetail;
