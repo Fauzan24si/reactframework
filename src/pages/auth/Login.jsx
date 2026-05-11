@@ -12,10 +12,9 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    setLoading(true)
-    setError(false)
+    e.preventDefault();
+    setLoading(true);
+    setError(false);
 
     axios
       .post("https://dummyjson.com/user/login", {
@@ -23,21 +22,14 @@ const Login = () => {
         password: dataForm.password,
       })
       .then((response) => {
-        // Jika status bukan 200, tampilkan pesan error
         if (response.status !== 200) {
           setError(response.data.message);
           return; 
         }
-
-        // Redirect ke dashboard jika login sukses
         navigate("/admin/dashboard");
       })
       .catch((err) => {
-        if (err.response) {
-          setError(err.response.data.message || "An error occurred");
-        } else {
-          setError(err.message || "An unknown error occurred");
-        }
+        setError(err.response?.data?.message || err.message || "An error occurred");
       })
       .finally(() => {
         setLoading(false); 
@@ -50,20 +42,21 @@ const Login = () => {
   };
 
   return (
-    <div style={styles.card}>
-      <h2 style={styles.title}>Admin Login</h2>
-      <p style={styles.subtitle}>Sign in to access the dashboard</p>
+    <div style={styles.container}>
+      <h2 style={styles.title}>Welcome back</h2>
+      <p style={styles.subtitle}>Welcome back please enter your details</p>
       
       <form onSubmit={handleSubmit} style={styles.form}>
         {error && <div style={styles.error}>{error}</div>}
         
         <div style={styles.inputGroup}>
-          <label style={styles.label}>Username / Email</label>
+          <label style={styles.label}>Email</label>
           <input 
             type="text" 
             name="email"
             value={dataForm.email} 
             onChange={handleChange} 
+            placeholder="Enter your email"
             style={styles.input}
             required
           />
@@ -75,85 +68,123 @@ const Login = () => {
             type="password" 
             name="password"
             value={dataForm.password} 
-            onChange={handleChange} 
+            onChange={handleChange}
+            placeholder="............"
             style={styles.input}
             required
           />
         </div>
         
-        <button type="submit" disabled={loading} style={styles.button}>
+        <div style={styles.forgotRow}>
+          <a href="#" style={styles.forgotLink}>Forgot password</a>
+        </div>
+        
+        <button type="submit" disabled={loading} style={styles.primaryButton}>
           {loading ? 'Signing In...' : 'Sign In'}
         </button>
+        
+        <button type="button" style={styles.googleButton}>
+          Sign in with Google
+        </button>
       </form>
+      
+      <p style={styles.footerText}>
+        Don't have an account. <a href="#" style={styles.cyanLink}>Sign in</a>
+      </p>
     </div>
   );
 };
 
 const styles = {
-  card: {
-    backgroundColor: '#fff',
-    padding: '40px',
-    borderRadius: '16px',
-    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+  container: {
     width: '100%',
+    fontFamily: 'Inter, sans-serif',
   },
   title: {
-    fontSize: '24px',
+    fontSize: '26px',
     fontWeight: '700',
-    marginBottom: '8px',
-    color: '#1f2937',
-    textAlign: 'center',
+    color: '#111827',
+    margin: '0 0 8px 0',
   },
   subtitle: {
-    fontSize: '14px',
-    color: '#6b7280',
-    marginBottom: '28px',
-    textAlign: 'center',
+    fontSize: '13px',
+    color: '#9CA3AF',
+    margin: '0 0 32px 0',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '18px',
+    gap: '20px',
   },
   inputGroup: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '6px',
+    gap: '8px',
   },
   label: {
-    fontSize: '14px',
-    fontWeight: '500',
+    fontSize: '12px',
+    fontWeight: '600',
     color: '#374151',
   },
   input: {
-    padding: '12px 14px',
-    borderRadius: '10px',
-    border: '1px solid #e5e7eb',
+    padding: '12px 16px',
+    borderRadius: '6px',
+    border: '1px solid #E5E7EB',
     fontSize: '14px',
-    fontFamily: 'inherit',
-    transition: 'border-color 0.2s, box-shadow 0.2s',
     outline: 'none',
+    transition: 'border-color 0.2s',
   },
-  button: {
-    padding: '14px',
-    backgroundColor: '#054C73',
+  forgotRow: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginTop: '-8px',
+  },
+  forgotLink: {
+    fontSize: '12px',
+    color: '#4FC3F7',
+    textDecoration: 'none',
+    fontWeight: '500',
+  },
+  primaryButton: {
+    padding: '12px',
+    backgroundColor: '#043CA5',
     color: 'white',
     border: 'none',
-    borderRadius: '10px',
-    fontSize: '15px',
-    fontWeight: '600',
+    borderRadius: '6px',
+    fontSize: '14px',
+    fontWeight: '500',
     cursor: 'pointer',
-    marginTop: '8px',
-    transition: 'background-color 0.2s, transform 0.1s',
-    fontFamily: 'inherit',
+    marginTop: '12px',
+    transition: 'background 0.2s',
+  },
+  googleButton: {
+    padding: '12px',
+    backgroundColor: '#E1F5FE',
+    color: '#0288D1',
+    border: 'none',
+    borderRadius: '6px',
+    fontSize: '14px',
+    fontWeight: '500',
+    cursor: 'pointer',
+    transition: 'background 0.2s',
+  },
+  footerText: {
+    marginTop: '40px',
+    textAlign: 'center',
+    fontSize: '12px',
+    color: '#9CA3AF',
+  },
+  cyanLink: {
+    color: '#4FC3F7',
+    textDecoration: 'none',
+    fontWeight: '500',
   },
   error: {
     backgroundColor: '#fef2f2',
     color: '#dc2626',
     padding: '12px',
-    borderRadius: '10px',
-    fontSize: '14px',
-    textAlign: 'center',
+    borderRadius: '6px',
+    fontSize: '13px',
     border: '1px solid #fecaca',
   }
 };

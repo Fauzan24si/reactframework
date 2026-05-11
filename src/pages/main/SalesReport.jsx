@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiDollarSign, FiShoppingBag, FiXCircle, FiClock, FiSearch, FiChevronRight } from 'react-icons/fi';
+import { FiDollarSign, FiShoppingBag, FiXCircle, FiClock, FiSearch, FiMoreVertical } from 'react-icons/fi';
 import salesData from '../../data/sales.json';
 
 const formatRupiah = (n) =>
@@ -48,9 +48,6 @@ function SalesReport() {
     <>
       <style>{componentStyles}</style>
 
-      <h1 className="admin-page-title">Sales Report</h1>
-      <p className="admin-page-subtitle">Ringkasan transaksi pembelian toko furniture</p>
-
       {/* Summary Cards */}
       <div className="sr-stats">
         <StatCard
@@ -82,91 +79,89 @@ function SalesReport() {
         />
       </div>
 
-      {/* Toolbar */}
-      <div className="sr-toolbar">
-        <div className="sr-tabs">
-          {['all', 'Completed', 'Processing', 'Cancelled'].map((s) => (
-            <button
-              key={s}
-              onClick={() => setStatusFilter(s)}
-              className={`sr-tab ${statusFilter === s ? 'active' : ''}`}
-            >
-              {s === 'all' ? 'Semua' : s}
-            </button>
-          ))}
+      <div className="table-container">
+        {/* Header Section */}
+        <div className="table-header-section">
+          <div>
+            <h1 className="table-main-title">Sales Report</h1>
+            <p className="table-sub-title">
+              Ringkasan transaksi pembelian toko furniture
+            </p>
+          </div>
+          <button className="btn-download-all-top">Download report</button>
         </div>
 
-        <div className="sr-search">
-          <FiSearch size={16} />
-          <input
-            type="text"
-            placeholder="Cari invoice, customer, produk..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-      </div>
+        {/* Toolbar Section */}
+        <div className="table-search-row custom-toolbar">
+          <div className="sr-tabs">
+            {['all', 'Completed', 'Processing', 'Cancelled'].map((s) => (
+              <button
+                key={s}
+                onClick={() => setStatusFilter(s)}
+                className={`sr-tab ${statusFilter === s ? 'active' : ''}`}
+              >
+                {s === 'all' ? 'Semua' : s}
+              </button>
+            ))}
+          </div>
 
-      {/* Table */}
-      <div className="sr-table-card">
-        <div style={{ overflowX: 'auto' }}>
-          <table className="sr-table">
+          <div className="search-wrapper">
+            <FiSearch className="search-icon" size={16} />
+            <input
+              type="text"
+              placeholder="Cari invoice, customer, produk..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="search-input"
+            />
+          </div>
+        </div>
+
+        {/* Table */}
+        <div style={{ overflowX: 'auto', background: '#fff', padding: '0 16px' }}>
+          <table className="clean-table">
             <thead>
               <tr>
-                <th>Invoice</th>
-                <th>Tanggal</th>
                 <th>Customer</th>
-                <th>Produk</th>
-                <th>Kategori</th>
-                <th className="num">Qty</th>
-                <th className="num">Harga</th>
-                <th className="num">Total</th>
-                <th>Pembayaran</th>
+                <th>Product</th>
+                <th>Id</th>
+                <th>Revenue</th>
                 <th>Status</th>
-                <th style={{ width: 40 }}></th>
+                <th>Date</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((row) => (
-                <tr key={row.id} onClick={() => navigate(`/orders/${row.id}`)} className="sr-row-click">
-                  <td><span className="sr-invoice">{row.id}</span></td>
-                  <td className="muted">{formatDate(row.date)}</td>
-                  <td className="sr-customer">{row.customer}</td>
-                  <td className="sr-product">{row.product}</td>
-                  <td className="muted">{row.category}</td>
-                  <td className="num">{row.qty}</td>
-                  <td className="num muted">{formatRupiah(row.price)}</td>
-                  <td className="num sr-total">{formatRupiah(row.total)}</td>
-                  <td className="muted">{row.payment}</td>
+                <tr key={row.id}>
                   <td>
-                    <span className={`sr-badge ${row.status.toLowerCase()}`}>
-                      {row.status}
-                    </span>
+                    <div className="customer-cell">
+                      <img src={`https://ui-avatars.com/api/?name=${row.customer}&background=random&color=fff`} alt={row.customer} className="cust-avatar" />
+                      <div className="cust-info">
+                        <span className="cust-name">{row.customer}</span>
+                        <span className="cust-email">{row.customer.split(' ')[0].toLowerCase()}@gmail.com</span>
+                      </div>
+                    </div>
                   </td>
-                  <td className="sr-chev"><FiChevronRight /></td>
+                  <td className="text-gray">{row.product}</td>
+                  <td className="text-gray">{row.id}</td>
+                  <td className="text-gray">{formatRupiah(row.total)}</td>
+                  <td>
+                    <div className="status-cell">
+                      <span className={`status-dot ${row.status.toLowerCase()}`}></span>
+                      <span className="status-text">{row.status}</span>
+                    </div>
+                  </td>
+                  <td className="text-gray">{formatDate(row.date)}</td>
                 </tr>
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={11} className="sr-empty">
+                  <td colSpan={6} className="empty-state">
                     Tidak ada transaksi yang cocok.
                   </td>
                 </tr>
               )}
             </tbody>
-            {filtered.length > 0 && (
-              <tfoot>
-                <tr>
-                  <td colSpan={7} className="sr-foot-label">
-                    Total ({filtered.length} transaksi)
-                  </td>
-                  <td className="num sr-foot-total">
-                    {formatRupiah(filtered.reduce((sum, r) => sum + r.total, 0))}
-                  </td>
-                  <td colSpan={3}></td>
-                </tr>
-              </tfoot>
-            )}
           </table>
         </div>
       </div>
@@ -199,8 +194,8 @@ const componentStyles = `
     background: #fff;
     padding: 20px 22px;
     border-radius: 16px;
-    border: 1px solid #f3f4f6;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    border: 1px solid #eaecf0;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -208,7 +203,7 @@ const componentStyles = `
   }
   .sr-stat-label {
     font-size: 12px;
-    color: #9ca3af;
+    color: #667085;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.4px;
@@ -217,13 +212,13 @@ const componentStyles = `
   .sr-stat-value {
     font-size: 22px;
     font-weight: 700;
-    color: #1f2937;
+    color: #101828;
     margin: 0;
     letter-spacing: -0.02em;
   }
   .sr-stat-sub {
     font-size: 12px;
-    color: #9ca3af;
+    color: #98a2b3;
     margin: 4px 0 0;
   }
   .sr-stat-icon {
@@ -236,158 +231,211 @@ const componentStyles = `
     flex-shrink: 0;
     font-size: 20px;
   }
-  .sr-stat-icon.revenue     { background: #DFE9F4; color: #054C73; }
-  .sr-stat-icon.completed   { background: #dcfce7; color: #16a34a; }
-  .sr-stat-icon.processing  { background: #dbeafe; color: #1d4ed8; }
-  .sr-stat-icon.cancelled   { background: #fee2e2; color: #dc2626; }
+  .sr-stat-icon.revenue     { background: #f0f9ff; color: #0284c7; }
+  .sr-stat-icon.completed   { background: #ecfdf5; color: #059669; }
+  .sr-stat-icon.processing  { background: #eff6ff; color: #2563eb; }
+  .sr-stat-icon.cancelled   { background: #fef2f2; color: #dc2626; }
 
-  /* Toolbar */
-  .sr-toolbar {
+  /* New Theme Styles for Table */
+  .table-container {
+    background: #ffffff;
+    border: 1px solid #eaecf0;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .table-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px;
+    border-bottom: 1px solid #eaecf0;
+  }
+
+  .table-main-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #101828;
+    margin: 0 0 4px 0;
+  }
+
+  .table-sub-title {
+    font-size: 14px;
+    color: #667085;
+    margin: 0;
+  }
+
+  .btn-download-all-top {
+    background: #7a5af8;
+    color: #ffffff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-download-all-top:hover {
+    background: #6941c6;
+  }
+
+  .table-search-row {
+    padding: 16px 24px;
+    border-bottom: 1px solid #eaecf0;
+    background: #fcfcfd;
+  }
+
+  .custom-toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 16px;
     flex-wrap: wrap;
+    gap: 16px;
   }
+
+  /* Toolbar specific styles */
   .sr-tabs {
     display: inline-flex;
-    background: #fff;
-    border: 1px solid #f3f4f6;
-    border-radius: 10px;
+    background: #f2f4f7;
+    border-radius: 8px;
     padding: 4px;
     gap: 2px;
   }
   .sr-tab {
-    padding: 8px 16px;
+    padding: 6px 14px;
     background: transparent;
     border: none;
-    border-radius: 7px;
+    border-radius: 6px;
     font-size: 13px;
-    font-weight: 600;
-    color: #6b7280;
+    font-weight: 500;
+    color: #667085;
     cursor: pointer;
     transition: all 0.15s ease;
-    font-family: 'Poppins', sans-serif;
   }
-  .sr-tab:hover { color: #1f2937; }
+  .sr-tab:hover { color: #344054; }
   .sr-tab.active {
-    background: #054C73;
-    color: #fff;
+    background: #ffffff;
+    color: #344054;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
   }
 
-  .sr-search {
+  .search-wrapper {
     position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 0 14px;
-    min-width: 280px;
-    color: #9ca3af;
+    width: 100%;
+    max-width: 320px;
   }
-  .sr-search input {
-    flex: 1;
-    padding: 10px 0;
-    border: none;
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #98a2b3;
+    pointer-events: none;
+  }
+  .search-input {
+    width: 100%;
+    padding: 8px 14px 8px 40px;
+    background: #ffffff;
+    border: 1px solid #eaecf0;
+    border-radius: 6px;
     outline: none;
-    background: transparent;
-    font-size: 13px;
-    color: #374151;
-    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #344054;
+    transition: border-color 0.15s ease;
+  }
+  .search-input:focus {
+    border-color: #d0d5dd;
   }
 
-  /* Table */
-  .sr-table-card {
-    background: #fff;
-    border-radius: 14px;
-    border: 1px solid #f3f4f6;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    overflow: hidden;
-  }
-  .sr-table {
+  /* Clean Table Styles */
+  .clean-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
-  }
-  .sr-table thead th {
     text-align: left;
-    font-size: 11px;
-    font-weight: 700;
-    color: #9ca3af;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 14px 16px;
-    background: #fafafa;
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+  .clean-table thead th {
+    padding: 16px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
     border-bottom: 1px solid #f3f4f6;
     white-space: nowrap;
   }
-  .sr-table th.num, .sr-table td.num { text-align: right; }
-
-  .sr-table tbody tr {
+  .clean-table tbody tr {
     border-bottom: 1px solid #f9fafb;
     transition: background 0.15s;
   }
-  .sr-table tbody tr:last-child { border-bottom: none; }
-  .sr-table tbody tr:hover { background: #f9fafb; }
-  .sr-table tbody tr.sr-row-click { cursor: pointer; }
-  .sr-table tbody tr.sr-row-click:hover .sr-invoice { text-decoration: underline; }
-  .sr-chev { color: #d1d5db; text-align: right; padding-right: 16px !important; }
-  .sr-table tbody tr:hover .sr-chev { color: #054C73; }
-
-  .sr-table tbody td {
-    padding: 14px 16px;
-    color: #1f2937;
-    white-space: nowrap;
+  .clean-table tbody tr:hover {
+    background: #fcfcfd;
+  }
+  .clean-table tbody td {
+    padding: 16px 24px;
+    font-size: 13px;
+    color: #4b5563;
     vertical-align: middle;
-  }
-  .sr-table td.muted { color: #6b7280; }
-
-  .sr-invoice {
-    font-weight: 700;
-    color: #054C73;
-    font-size: 12.5px;
-  }
-  .sr-customer { font-weight: 600; }
-  .sr-product { color: #374151; }
-  .sr-total { font-weight: 700; color: #1f2937; }
-
-  .sr-badge {
-    display: inline-block;
-    padding: 3px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-  }
-  .sr-badge.completed  { background: #dcfce7; color: #15803d; }
-  .sr-badge.processing { background: #dbeafe; color: #1d4ed8; }
-  .sr-badge.cancelled  { background: #fee2e2; color: #dc2626; }
-
-  .sr-empty {
-    text-align: center;
-    padding: 32px;
-    color: #9ca3af;
-    font-size: 14px;
+    white-space: nowrap;
   }
 
-  .sr-table tfoot td {
-    padding: 14px 16px;
-    background: #fafafa;
-    border-top: 2px solid #f3f4f6;
+  .customer-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .cust-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .cust-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .cust-name {
+    font-weight: 600;
+    color: #111827;
     font-size: 13px;
   }
-  .sr-foot-label {
-    text-align: right;
-    font-weight: 600;
+  .cust-email {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 2px;
+  }
+
+  .status-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .status-dot.completed { background: #6366f1; } /* Blue/Purple */
+  .status-dot.processing { background: #06b6d4; } /* Cyan */
+  .status-dot.cancelled { background: #ef4444; } /* Red */
+  
+  .status-text {
+    font-size: 13px;
     color: #6b7280;
   }
-  .sr-foot-total {
-    font-weight: 800;
-    color: #054C73;
-    font-size: 14px;
+
+  /* Typography utilities */
+  .text-gray { color: #6b7280 !important; }
+  .text-dark { color: #111827 !important; }
+  .font-medium { font-weight: 500; }
+  .font-bold { font-weight: 600; }
+  
+  .empty-state {
+    text-align: center;
+    padding: 40px !important;
+    color: #6b7280 !important;
   }
 
   /* Responsive */
@@ -396,7 +444,7 @@ const componentStyles = `
   }
   @media (max-width: 640px) {
     .sr-stats { grid-template-columns: 1fr; }
-    .sr-search { min-width: 100%; }
+    .search-wrapper { max-width: 100%; }
   }
 `;
 

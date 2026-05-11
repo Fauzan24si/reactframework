@@ -77,7 +77,7 @@ const styles = {
     justifyContent: 'center',
     background: '#F4F5F7',
     padding: '24px',
-    fontFamily: "'Poppins', sans-serif",
+    fontFamily: "'Lato', sans-serif",
   },
   card: {
     background: '#fff',

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiSearch, FiChevronRight } from 'react-icons/fi';
+import { FiMoreVertical, FiSearch } from 'react-icons/fi';
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -39,51 +39,53 @@ function Users() {
     <>
       <style>{tableStyles}</style>
 
-      <div style={styles.titleRow}>
-        <div>
-          <h1 className="admin-page-title">Users</h1>
-          <p className="admin-page-subtitle" style={{ margin: 0 }}>
-            Daftar pengguna yang terdaftar
-          </p>
-        </div>
-
-        <div style={styles.searchWrapper}>
-          <FiSearch style={styles.searchIcon} size={16} />
-          <input
-            type="text"
-            placeholder="Cari nama, email, atau username..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={styles.searchInput}
-          />
-        </div>
-      </div>
-
-      <div style={styles.countBadge}>
-        {loading ? 'Memuat data...' : `${filtered.length} user ditemukan`}
-      </div>
-
       {error && (
         <div style={styles.error}>Gagal memuat data: {error}</div>
       )}
 
-      <div style={styles.tableCard}>
+      <div className="table-container">
+        {/* Header Section mimicking the image */}
+        <div className="table-header-section">
+          <div>
+            <h1 className="table-main-title">Users list</h1>
+            <p className="table-sub-title">
+              Manage your users, roles, and permissions.
+            </p>
+          </div>
+          <button className="btn-download-all-top">Add user</button>
+        </div>
+
+        <div className="table-search-row">
+           <div style={styles.searchWrapper}>
+             <FiSearch style={styles.searchIcon} size={16} />
+             <input
+               type="text"
+               placeholder="Search users..."
+               value={search}
+               onChange={(e) => setSearch(e.target.value)}
+               style={styles.searchInput}
+             />
+           </div>
+        </div>
+
         <div style={{ overflowX: 'auto' }}>
-          <table className="users-table">
+          <table className="theme-table">
             <thead>
               <tr>
-                <th style={{ width: 64 }}>#</th>
+                <th style={{ width: 48, paddingLeft: 24 }}>
+                  <input type="checkbox" className="custom-checkbox" />
+                </th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Gender</th>
                 <th>Age</th>
-                <th style={{ width: 48 }}></th>
+                <th style={{ width: 140, textAlign: 'right', paddingRight: 24 }}></th>
               </tr>
             </thead>
             <tbody>
               {loading &&
-                [...Array(8)].map((_, i) => (
+                [...Array(6)].map((_, i) => (
                   <tr key={`sk-${i}`} className="skeleton-row">
                     <td colSpan={7}>
                       <div className="skeleton-bar" />
@@ -92,42 +94,49 @@ function Users() {
                 ))}
 
               {!loading &&
-                filtered.map((user) => (
-                  <tr
-                    key={user.id}
-                    onClick={() => navigate(`/users/${user.id}`)}
-                  >
-                    <td>
-                      <span className="user-id">#{user.id}</span>
+                filtered.map((user, i) => (
+                  <tr key={user.id} onClick={() => navigate(`/users/${user.id}`)}>
+                    <td style={{ paddingLeft: 24 }} onClick={(e) => e.stopPropagation()}>
+                      <input 
+                        type="checkbox" 
+                        className="custom-checkbox" 
+                        defaultChecked={i % 2 !== 0}
+                      />
                     </td>
                     <td>
-                      <div className="user-cell">
-                        <img src={user.image} alt={user.firstName} className="user-avatar" />
-                        <div className="user-meta">
-                          <span className="user-name">
-                            {user.firstName} {user.lastName}
-                          </span>
-                          <span className="user-username">@{user.username}</span>
-                        </div>
+                      <div className="user-info-cell">
+                        <img src={user.image} alt={user.firstName} className="user-avatar-img" />
+                        <span className="user-name-text">
+                          {user.firstName} {user.lastName}
+                        </span>
                       </div>
                     </td>
-                    <td className="muted">{user.email}</td>
-                    <td className="muted">{user.phone}</td>
-                    <td>
-                      <span className={`gender-badge ${user.gender}`}>
-                        {user.gender}
-                      </span>
-                    </td>
-                    <td className="muted">{user.age}</td>
-                    <td className="chevron-cell">
-                      <FiChevronRight />
+                    <td className="text-gray">{user.email}</td>
+                    <td className="text-gray">{user.phone}</td>
+                    <td className="text-gray capitalize">{user.gender}</td>
+                    <td className="text-gray">{user.age} Years</td>
+                    <td style={{ paddingRight: 24, textAlign: 'right' }}>
+                      <div className="action-cell">
+                        <button 
+                          className="btn-action-row" 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/users/${user.id}`);
+                          }}
+                        >
+                          View details
+                        </button>
+                        <button className="btn-icon" onClick={(e) => e.stopPropagation()}>
+                          <FiMoreVertical size={20} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
 
               {!loading && !error && filtered.length === 0 && (
                 <tr>
-                  <td colSpan={7} style={{ textAlign: 'center', padding: '32px', color: '#9ca3af' }}>
+                  <td colSpan={7} className="empty-state">
                     Tidak ada user yang cocok dengan pencarian.
                   </td>
                 </tr>
@@ -141,14 +150,6 @@ function Users() {
 }
 
 const styles = {
-  titleRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    gap: '20px',
-    marginBottom: '20px',
-    flexWrap: 'wrap',
-  },
   searchWrapper: {
     position: 'relative',
     width: '100%',
@@ -164,39 +165,19 @@ const styles = {
   },
   searchInput: {
     width: '100%',
-    padding: '10px 14px 10px 40px',
+    padding: '8px 14px 8px 40px',
     background: '#fff',
-    border: '1px solid #e5e7eb',
-    borderRadius: '10px',
+    border: '1px solid #eaecf0',
+    borderRadius: '6px',
     outline: 'none',
     fontSize: '14px',
-    fontWeight: 500,
     color: '#374151',
-    fontFamily: 'inherit',
-  },
-  countBadge: {
-    display: 'inline-block',
-    fontSize: '13px',
-    fontWeight: 600,
-    color: '#6b7280',
-    background: '#fff',
-    padding: '8px 14px',
-    borderRadius: '10px',
-    border: '1px solid #f3f4f6',
-    marginBottom: '20px',
-  },
-  tableCard: {
-    background: '#fff',
-    borderRadius: '14px',
-    border: '1px solid #f3f4f6',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-    overflow: 'hidden',
   },
   error: {
     background: '#fef2f2',
     color: '#dc2626',
     padding: '14px 16px',
-    borderRadius: '12px',
+    borderRadius: '8px',
     border: '1px solid #fecaca',
     marginBottom: '16px',
     fontSize: '14px',
@@ -204,128 +185,195 @@ const styles = {
 };
 
 const tableStyles = `
-  .users-table {
+  /* Theme matching the provided image */
+  .table-container {
+    background: #ffffff;
+    border: 1px solid #eaecf0;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .table-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px;
+    border-bottom: 1px solid #eaecf0;
+  }
+
+  .table-main-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #101828;
+    margin: 0 0 4px 0;
+  }
+
+  .table-sub-title {
+    font-size: 14px;
+    color: #667085;
+    margin: 0;
+  }
+
+  .btn-download-all-top {
+    background: #7a5af8;
+    color: #ffffff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-download-all-top:hover {
+    background: #6941c6;
+  }
+
+  .table-search-row {
+    padding: 16px 24px;
+    border-bottom: 1px solid #eaecf0;
+    background: #fcfcfd;
+  }
+
+  .theme-table {
     width: 100%;
     border-collapse: collapse;
-    font-family: 'Poppins', sans-serif;
-  }
-
-  .users-table thead th {
     text-align: left;
-    font-size: 11px;
-    font-weight: 700;
-    color: #9ca3af;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    padding: 14px 18px;
-    border-bottom: 1px solid #f3f4f6;
-    background: #fafafa;
-    white-space: nowrap;
   }
 
-  .users-table tbody tr {
-    border-bottom: 1px solid #f9fafb;
-    transition: background 0.15s;
+  .theme-table thead th {
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #475467;
+    background: #ffffff;
+    border-bottom: 1px solid #eaecf0;
+  }
+
+  .theme-table tbody tr {
+    border-bottom: 1px solid #eaecf0;
     cursor: pointer;
+    transition: background 0.15s;
   }
 
-  .users-table tbody tr:last-child { border-bottom: none; }
-
-  .users-table tbody tr:hover {
+  .theme-table tbody tr:hover {
     background: #f9fafb;
   }
 
-  .users-table tbody td {
-    padding: 14px 18px;
+  .theme-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .theme-table tbody td {
+    padding: 16px;
     font-size: 14px;
-    color: #1f2937;
+    color: #101828;
     vertical-align: middle;
   }
 
-  .users-table td.muted { color: #6b7280; }
-
-  .user-id {
-    font-weight: 700;
-    color: #054C73;
-    font-size: 13px;
+  /* Custom Checkbox */
+  .custom-checkbox {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #d0d5dd;
+    border-radius: 4px;
+    cursor: pointer;
+    accent-color: #6941c6;
   }
 
-  .user-cell {
+  /* User Info Cell */
+  .user-info-cell {
     display: flex;
     align-items: center;
     gap: 12px;
   }
 
-  .user-avatar {
-    width: 38px;
-    height: 38px;
+  .user-avatar-img {
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
+    background: #f2f4f7;
     object-fit: cover;
-    background: #f3f4f6;
-    flex-shrink: 0;
   }
 
-  .user-meta {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
-  .user-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1f2937;
-    line-height: 1.3;
-  }
-
-  .user-username {
-    font-size: 12px;
-    color: #054C73;
+  .user-name-text {
     font-weight: 500;
+    color: #101828;
   }
 
-  .gender-badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
+  /* Text Colors */
+  .text-gray {
+    color: #475467 !important;
+  }
+  
+  .capitalize {
     text-transform: capitalize;
-    letter-spacing: 0.3px;
   }
 
-  .gender-badge.male {
-    background: #dbeafe;
-    color: #1d4ed8;
+  /* Action Buttons */
+  .action-cell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
   }
 
-  .gender-badge.female {
-    background: #fce7f3;
-    color: #be185d;
+  .btn-action-row {
+    background: #344054;
+    color: #ffffff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
   }
 
-  .chevron-cell {
-    color: #d1d5db;
-    width: 40px;
+  .btn-action-row:hover {
+    background: #1d2939;
   }
 
-  .users-table tbody tr:hover .chevron-cell {
-    color: #054C73;
+  .btn-icon {
+    background: transparent;
+    border: none;
+    color: #98a2b3;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
   }
 
+  .btn-icon:hover {
+    background: #f2f4f7;
+    color: #344054;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 32px !important;
+    color: #667085 !important;
+  }
+
+  /* Skeleton Loading */
   .skeleton-row td {
-    padding: 16px 18px !important;
+    padding: 20px 16px !important;
   }
 
   .skeleton-bar {
-    height: 14px;
-    border-radius: 6px;
-    background: linear-gradient(110deg, #f3f4f6 30%, #e5e7eb 50%, #f3f4f6 70%);
+    height: 20px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f2f4f7 25%, #eaecf0 50%, #f2f4f7 75%);
     background-size: 200% 100%;
-    animation: user-shimmer 1.5s infinite;
+    animation: pulse 1.5s infinite;
   }
 
-  @keyframes user-shimmer {
+  @keyframes pulse {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
   }

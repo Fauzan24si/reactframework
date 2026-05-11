@@ -5,40 +5,80 @@ const dashboardStyles = `
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    margin-bottom: 32px;
+    gap: 20px;
+    margin-bottom: 28px;
   }
 
   .stat-card {
     background: #fff;
-    padding: 24px;
-    border-radius: 16px;
-    border: 1px solid #f3f4f6;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    padding: 22px 20px 18px;
+    border-radius: 14px;
+    border: 1px solid #EDEDF0;
+    box-shadow: 0 2px 8px rgba(110, 57, 203, 0.05);
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 10px;
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
 
   .stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(110, 57, 203, 0.12);
+  }
+
+  .stat-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .stat-label {
     font-size: 13px;
-    color: #6b7280;
+    color: #89868D;
     font-weight: 500;
-    margin: 0 0 6px 0;
+    margin: 0;
   }
 
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+    transition: transform 0.2s;
+  }
+
+  .stat-card:hover .stat-icon { transform: scale(1.08); }
+
+  .stat-icon.revenue   { background: #EDE4F9; color: #6E39CB; }
+  .stat-icon.orders    { background: #FFF3E0; color: #E67E22; }
+  .stat-icon.customers { background: #E8F5E9; color: #2E7D32; }
+  .stat-icon.conversion{ background: #E3F2FD; color: #1565C0; }
+
   .stat-value {
-    font-size: 26px;
-    font-weight: 700;
-    color: #1f2937;
-    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 800;
+    color: #3A3541;
+    margin: 0;
+    line-height: 1;
+  }
+
+  /* Progress bar under value */
+  .stat-bar {
+    height: 4px;
+    border-radius: 4px;
+    background: #EDEDF0;
+    overflow: hidden;
+  }
+
+  .stat-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #9B6EE0 0%, #6E39CB 100%);
   }
 
   .stat-change {
@@ -51,87 +91,69 @@ const dashboardStyles = `
 
   .stat-change.positive { color: #22c55e; }
   .stat-change.negative { color: #ef4444; }
-
-  .stat-change span.muted {
-    color: #9ca3af;
-    font-weight: 400;
-  }
-
-  .stat-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: 22px;
-    transition: transform 0.3s;
-  }
-
-  .stat-card:hover .stat-icon { transform: scale(1.1); }
-
-  .stat-icon.revenue { background: #DFE9F4; color: #054C73; }
-  .stat-icon.orders { background: rgba(184, 142, 47, 0.15); color: #B88E2F; }
-  .stat-icon.customers { background: #dbeafe; color: #2563eb; }
-  .stat-icon.conversion { background: #dcfce7; color: #16a34a; }
+  .stat-change span.muted { color: #B4B2B7; font-weight: 400; }
 
   /* Bottom Grid */
   .bottom-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 32px;
+    gap: 24px;
   }
 
   /* Card */
   .card {
     background: #fff;
-    border-radius: 16px;
-    border: 1px solid #f3f4f6;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    padding: 24px;
+    border-radius: 14px;
+    border: 1px solid #EDEDF0;
+    box-shadow: 0 2px 8px rgba(110, 57, 203, 0.05);
+    padding: 22px;
   }
 
   .card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
   .card-title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
-    color: #1f2937;
+    color: #3A3541;
     margin: 0;
   }
 
   .view-all-btn {
     font-size: 13px;
-    color: #054C73;
+    color: #6E39CB;
     font-weight: 600;
     background: none;
     border: none;
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Lato', sans-serif;
     transition: opacity 0.2s;
+    padding: 4px 10px;
+    border-radius: 6px;
   }
 
-  .view-all-btn:hover { opacity: 0.7; text-decoration: underline; }
+  .view-all-btn:hover {
+    background: #EDE4F9;
+    opacity: 1;
+  }
 
   .more-btn {
-    padding: 4px;
+    padding: 6px;
     background: none;
     border: none;
-    color: #9ca3af;
+    color: #89868D;
     cursor: pointer;
-    border-radius: 6px;
-    transition: background 0.2s;
+    border-radius: 8px;
+    transition: background 0.15s;
     display: flex;
     align-items: center;
   }
 
-  .more-btn:hover { background: #f3f4f6; }
+  .more-btn:hover { background: #F0EAFA; color: #6E39CB; }
 
   /* Table */
   .orders-table {
@@ -141,73 +163,73 @@ const dashboardStyles = `
   }
 
   .orders-table thead th {
-    font-size: 12px;
-    font-weight: 600;
-    color: #9ca3af;
+    font-size: 11px;
+    font-weight: 700;
+    color: #B4B2B7;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid #f3f4f6;
+    letter-spacing: 0.8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #EDEDF0;
   }
 
   .orders-table tbody tr {
-    border-bottom: 1px solid #f9fafb;
+    border-bottom: 1px solid #F7F6FB;
     transition: background 0.15s;
     cursor: pointer;
   }
 
-  .orders-table tbody tr:hover { background: #f9fafb; }
-  .orders-table tbody td { padding: 14px 0; font-size: 14px; }
-  .orders-table .order-id { font-weight: 600; color: #1f2937; }
-  .orders-table tbody tr:hover .order-id { color: #054C73; }
-  .orders-table .customer-name { color: #4b5563; }
-  .orders-table .order-date { color: #6b7280; }
-  .orders-table .order-amount { font-weight: 600; color: #1f2937; }
+  .orders-table tbody tr:hover { background: #F7F6FB; }
+  .orders-table tbody td { padding: 13px 0; font-size: 14px; }
+  .orders-table .order-id { font-weight: 700; color: #3A3541; }
+  .orders-table tbody tr:hover .order-id { color: #6E39CB; }
+  .orders-table .customer-name { color: #3A3541; }
+  .orders-table .order-date { color: #89868D; }
+  .orders-table .order-amount { font-weight: 700; color: #3A3541; }
 
   .status-badge {
     display: inline-block;
-    padding: 4px 14px;
+    padding: 4px 12px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
   }
 
-  .status-badge.completed { background: #dcfce7; color: #15803d; }
-  .status-badge.processing { background: #dbeafe; color: #1d4ed8; }
-  .status-badge.cancelled { background: #fee2e2; color: #dc2626; }
+  .status-badge.completed  { background: #E8F5E9; color: #2E7D32; }
+  .status-badge.processing { background: #EDE4F9; color: #6E39CB; }
+  .status-badge.cancelled  { background: #FDECEA; color: #C62828; }
 
   /* Product Row */
   .product-row {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     padding: 10px;
     margin: 0 -10px;
-    border-radius: 12px;
+    border-radius: 10px;
     cursor: pointer;
     transition: background 0.15s;
   }
 
-  .product-row:hover { background: #f9fafb; }
-  .product-row + .product-row { margin-top: 8px; }
+  .product-row:hover { background: #F7F6FB; }
+  .product-row + .product-row { margin-top: 4px; }
 
   .product-img {
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
     border-radius: 10px;
     object-fit: cover;
     flex-shrink: 0;
-    background: #f3f4f6;
-    transition: transform 0.3s;
+    background: #F0EAFA;
+    transition: transform 0.2s;
   }
 
-  .product-row:hover .product-img { transform: scale(1.08); }
+  .product-row:hover .product-img { transform: scale(1.06); }
   .product-info { flex: 1; min-width: 0; }
 
   .product-name {
     font-size: 14px;
     font-weight: 700;
-    color: #1f2937;
+    color: #3A3541;
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -215,11 +237,11 @@ const dashboardStyles = `
     transition: color 0.15s;
   }
 
-  .product-row:hover .product-name { color: #054C73; }
+  .product-row:hover .product-name { color: #6E39CB; }
 
   .product-category {
     font-size: 12px;
-    color: #6b7280;
+    color: #89868D;
     margin: 2px 0 0;
     white-space: nowrap;
     overflow: hidden;
@@ -227,11 +249,11 @@ const dashboardStyles = `
   }
 
   .product-price { text-align: right; flex-shrink: 0; }
-  .product-price p:first-child { font-size: 14px; font-weight: 700; color: #054C73; margin: 0; }
-  .product-price p:last-child { font-size: 11px; color: #9ca3af; margin: 2px 0 0; }
+  .product-price p:first-child { font-size: 14px; font-weight: 700; color: #6E39CB; margin: 0; }
+  .product-price p:last-child  { font-size: 11px; color: #B4B2B7; margin: 2px 0 0; }
 
   @media (max-width: 1200px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-grid  { grid-template-columns: repeat(2, 1fr); }
     .bottom-grid { grid-template-columns: 1fr; }
   }
 
@@ -245,57 +267,57 @@ const Dashboard = () => {
     <>
       <style>{dashboardStyles}</style>
 
-      <h1 className="admin-page-title">Dashboard Overview</h1>
-      <p className="admin-page-subtitle">Welcome back, here's what's happening with your store today.</p>
+      <h1 className="admin-page-title" style={{ color: '#3A3541' }}>Dashboard Overview</h1>
+      <p className="admin-page-subtitle" style={{ color: '#89868D' }}>Welcome back, here's what's happening with your store today.</p>
 
       {/* Stats Cards */}
       <div className="stats-grid">
         <div className="stat-card">
-          <div>
+          <div className="stat-card-top">
             <p className="stat-label">Total Revenue</p>
-            <p className="stat-value">$24,560</p>
-            <div className="stat-change positive">
-              <span>+12.5%</span>
-              <span className="muted">vs last month</span>
-            </div>
+            <div className="stat-icon revenue"><FiDollarSign /></div>
           </div>
-          <div className="stat-icon revenue"><FiDollarSign /></div>
+          <p className="stat-value">$24,560</p>
+          <div className="stat-bar"><div className="stat-bar-fill" style={{ width: '72%' }}></div></div>
+          <div className="stat-change positive">
+            <span>+12.5%</span><span className="muted">vs last month</span>
+          </div>
         </div>
 
         <div className="stat-card">
-          <div>
+          <div className="stat-card-top">
             <p className="stat-label">Total Orders</p>
-            <p className="stat-value">1,245</p>
-            <div className="stat-change positive">
-              <span>+8.2%</span>
-              <span className="muted">vs last month</span>
-            </div>
+            <div className="stat-icon orders"><FiShoppingBag /></div>
           </div>
-          <div className="stat-icon orders"><FiShoppingBag /></div>
+          <p className="stat-value">1,245</p>
+          <div className="stat-bar"><div className="stat-bar-fill" style={{ width: '58%' }}></div></div>
+          <div className="stat-change positive">
+            <span>+8.2%</span><span className="muted">vs last month</span>
+          </div>
         </div>
 
         <div className="stat-card">
-          <div>
+          <div className="stat-card-top">
             <p className="stat-label">Total Customers</p>
-            <p className="stat-value">842</p>
-            <div className="stat-change negative">
-              <span>-2.4%</span>
-              <span className="muted">vs last month</span>
-            </div>
+            <div className="stat-icon customers"><FiUsers /></div>
           </div>
-          <div className="stat-icon customers"><FiUsers /></div>
+          <p className="stat-value">842</p>
+          <div className="stat-bar"><div className="stat-bar-fill" style={{ width: '45%' }}></div></div>
+          <div className="stat-change negative">
+            <span>-2.4%</span><span className="muted">vs last month</span>
+          </div>
         </div>
 
         <div className="stat-card">
-          <div>
+          <div className="stat-card-top">
             <p className="stat-label">Conversion Rate</p>
-            <p className="stat-value">4.5%</p>
-            <div className="stat-change positive">
-              <span>+1.2%</span>
-              <span className="muted">vs last month</span>
-            </div>
+            <div className="stat-icon conversion"><FiTrendingUp /></div>
           </div>
-          <div className="stat-icon conversion"><FiTrendingUp /></div>
+          <p className="stat-value">4.5%</p>
+          <div className="stat-bar"><div className="stat-bar-fill" style={{ width: '35%' }}></div></div>
+          <div className="stat-change positive">
+            <span>+1.2%</span><span className="muted">vs last month</span>
+          </div>
         </div>
       </div>
 

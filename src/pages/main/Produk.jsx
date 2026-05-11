@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FiSearch, FiShoppingCart, FiStar } from 'react-icons/fi';
+import { FiSearch, FiMoreVertical } from 'react-icons/fi';
 
 function Produk() {
   const [products, setProducts] = useState([]);
@@ -127,75 +127,76 @@ function Produk() {
 function ProductCard({ item }) {
   const [hovered, setHovered] = useState(false);
 
+  // Mock avatars based on item data to mimic the image
+  const avatars = [
+    `https://ui-avatars.com/api/?name=${item.title.charAt(0)}&background=random&color=fff&size=24`,
+    `https://ui-avatars.com/api/?name=${item.brand?.charAt(0) || 'B'}&background=random&color=fff&size=24`,
+    `https://ui-avatars.com/api/?name=${item.category?.charAt(0) || 'C'}&background=random&color=fff&size=24`,
+  ];
+
   return (
     <Link
       to={`/products/${item.id}`}
       style={{
-        ...styles.card,
-        ...(hovered ? styles.cardHover : {}),
+        ...styles.cardWidget,
+        ...(hovered ? styles.cardWidgetHover : {}),
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Image */}
-      <div style={styles.imageContainer}>
-        <span style={styles.categoryBadge}>
-          {item.category.replace('-', ' ')}
-        </span>
-        <span style={styles.ratingBadge}>
-          <FiStar style={{ color: '#f59e0b', fill: '#f59e0b' }} size={12} />
-          <span style={{ fontSize: '11px', fontWeight: 700, color: '#374151' }}>{item.rating}</span>
-        </span>
-        <img
-          src={item.thumbnail}
-          alt={item.title}
-          style={{
-            ...styles.productImage,
-            transform: hovered ? 'scale(1.08)' : 'scale(1)',
-          }}
-          loading="lazy"
-        />
+      {/* Top Header */}
+      <div style={styles.cwHeader}>
+        <div style={styles.cwIconBox}>
+          <img src={item.thumbnail} alt={item.title} style={styles.cwIconImg} loading="lazy" />
+        </div>
+        <div style={styles.cwTitleArea}>
+          <h3 style={styles.cwTitle}>{item.title}</h3>
+          <div style={styles.cwAvatars}>
+            {avatars.map((url, idx) => (
+              <img key={idx} src={url} alt="avatar" style={{
+                ...styles.cwAvatarImg,
+                marginLeft: idx === 0 ? 0 : '-6px',
+                zIndex: 3 - idx
+              }} />
+            ))}
+            <div style={{
+               ...styles.cwAvatarImg,
+               marginLeft: '-6px',
+               zIndex: 0,
+               background: '#f2f4f7',
+               color: '#667085',
+               display: 'flex',
+               alignItems: 'center',
+               justifyContent: 'center',
+               fontSize: '8px',
+               fontWeight: 'bold'
+            }}>
+               +{Math.floor(item.rating * 10)}
+            </div>
+          </div>
+        </div>
+        <div style={styles.cwMenu}>
+          <FiMoreVertical size={16} />
+        </div>
       </div>
 
-      {/* Content */}
-      <div style={styles.cardContent}>
-        <span style={styles.brandLabel}>
-          {item.brand || 'Premium Brand'}
-        </span>
+      {/* Description */}
+      <p style={styles.cwDesc}>
+        {item.description}
+      </p>
 
-        <h3 style={{
-          ...styles.productTitle,
-          color: hovered ? '#054C73' : '#111827',
-        }}>
-          {item.title}
-        </h3>
+      {/* Divider */}
+      <hr style={styles.cwDivider} />
 
-        <p style={styles.productDesc}>
-          {item.description}
-        </p>
-
-        <div style={styles.priceRow}>
-          <div style={styles.priceCol}>
-            <span style={{
-              ...styles.currentPrice,
-              color: hovered ? '#054C73' : '#111827',
-            }}>
-              Rp {(item.price * 15000).toLocaleString('id-ID')}
-            </span>
-          </div>
-
-          <button
-            style={{
-              ...styles.cartButton,
-              background: hovered ? '#054C73' : '#f9fafb',
-              color: hovered ? '#fff' : '#6b7280',
-              borderColor: hovered ? '#054C73' : '#e5e7eb',
-              boxShadow: hovered ? '0 4px 12px rgba(5,76,115,0.25)' : 'none',
-            }}
-            onClick={(e) => e.preventDefault()}
-          >
-            <FiShoppingCart size={16} />
-          </button>
+      {/* Footer stats */}
+      <div style={styles.cwFooter}>
+        <div style={styles.cwStatLeft}>
+          <span style={styles.cwVal}>{item.stock}</span>
+          <span style={styles.cwLbl}>In Stock</span>
+        </div>
+        <div style={styles.cwStatRight}>
+          <span style={styles.cwVal}>${item.price}</span>
+          <span style={styles.cwLbl}>Price</span>
         </div>
       </div>
     </Link>
@@ -223,19 +224,19 @@ const styles = {
     left: '14px',
     top: '50%',
     transform: 'translateY(-50%)',
-    color: '#9ca3af',
+    color: '#89868D',
     pointerEvents: 'none',
   },
   searchInput: {
     width: '100%',
     padding: '10px 14px 10px 40px',
     background: '#fff',
-    border: '1px solid #e5e7eb',
+    border: '1px solid #EDEDF0',
     borderRadius: '10px',
     outline: 'none',
     fontSize: '14px',
     fontWeight: 500,
-    color: '#374151',
+    color: '#3A3541',
     fontFamily: 'inherit',
   },
 
@@ -243,11 +244,11 @@ const styles = {
     display: 'inline-block',
     fontSize: '13px',
     fontWeight: 600,
-    color: '#6b7280',
+    color: '#89868D',
     background: '#fff',
     padding: '8px 14px',
     borderRadius: '10px',
-    border: '1px solid #f3f4f6',
+    border: '1px solid #EDEDF0',
     marginBottom: '20px',
   },
 
@@ -257,144 +258,137 @@ const styles = {
     gap: '20px',
   },
 
-  /* Card — selaras warna admin (#054C73) */
-  card: {
+  /* Widget Card Theme */
+  cardWidget: {
     display: 'flex',
     flexDirection: 'column',
     background: '#fff',
-    borderRadius: '16px',
-    overflow: 'hidden',
-    border: '1px solid #f3f4f6',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+    borderRadius: '12px',
+    padding: '20px',
+    border: '1px solid #eaecf0',
+    boxShadow: '0 1px 3px rgba(16, 24, 40, 0.05)',
     textDecoration: 'none',
     color: 'inherit',
-    transition: 'all 0.3s ease',
+    transition: 'all 0.2s ease',
     cursor: 'pointer',
   },
-  cardHover: {
-    borderColor: '#DFE9F4',
-    boxShadow: '0 12px 28px rgba(5,76,115,0.1)',
-    transform: 'translateY(-3px)',
+  cardWidgetHover: {
+    boxShadow: '0 6px 16px rgba(16, 24, 40, 0.08)',
+    borderColor: '#d0d5dd',
+    transform: 'translateY(-2px)',
   },
-
-  imageContainer: {
-    position: 'relative',
-    height: '200px',
-    background: 'linear-gradient(135deg, #f9fafb, #f3f4f6)',
+  cwHeader: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: '16px',
+  },
+  cwIconBox: {
+    width: '44px',
+    height: '44px',
+    borderRadius: '10px',
+    background: '#1d1d21',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '20px',
     overflow: 'hidden',
+    flexShrink: 0,
   },
-  productImage: {
+  cwIconImg: {
     width: '100%',
     height: '100%',
-    objectFit: 'contain',
-    transition: 'transform 0.6s ease',
+    objectFit: 'cover',
   },
-  categoryBadge: {
-    position: 'absolute',
-    top: '10px',
-    left: '10px',
-    zIndex: 2,
-    background: 'rgba(255,255,255,0.95)',
-    padding: '4px 10px',
-    borderRadius: '20px',
-    fontSize: '10px',
-    fontWeight: 700,
-    color: '#6b7280',
-    textTransform: 'capitalize',
-    letterSpacing: '0.04em',
-  },
-  ratingBadge: {
-    position: 'absolute',
-    top: '10px',
-    right: '10px',
-    zIndex: 2,
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    background: 'rgba(255,255,255,0.95)',
-    padding: '4px 8px',
-    borderRadius: '20px',
-  },
-
-  cardContent: {
-    padding: '18px',
+  cwTitleArea: {
+    flexGrow: 1,
+    marginLeft: '12px',
     display: 'flex',
     flexDirection: 'column',
-    flexGrow: 1,
+    justifyContent: 'center',
+    minWidth: 0,
   },
-  brandLabel: {
-    fontSize: '10px',
-    fontWeight: 700,
-    color: '#9ca3af',
-    textTransform: 'uppercase',
-    letterSpacing: '0.1em',
-    marginBottom: '4px',
-  },
-  productTitle: {
+  cwTitle: {
     fontSize: '15px',
-    fontWeight: 700,
-    lineHeight: 1.3,
-    margin: '0 0 8px 0',
+    fontWeight: 600,
+    color: '#344054',
+    margin: '0 0 6px 0',
+    lineHeight: 1.2,
+    whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    transition: 'color 0.25s ease',
   },
-  productDesc: {
-    fontSize: '12.5px',
-    color: '#9ca3af',
+  cwAvatars: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  cwAvatarImg: {
+    width: '20px',
+    height: '20px',
+    borderRadius: '50%',
+    border: '1.5px solid #fff',
+    objectFit: 'cover',
+  },
+  cwMenu: {
+    color: '#98a2b3',
+    padding: '4px',
+    cursor: 'pointer',
+    marginRight: '-4px',
+    marginTop: '-4px',
+  },
+  cwDesc: {
+    fontSize: '13px',
+    color: '#667085',
     lineHeight: 1.5,
     margin: '0 0 16px 0',
-    overflow: 'hidden',
     display: '-webkit-box',
     WebkitLineClamp: 2,
     WebkitBoxOrient: 'vertical',
-    flexGrow: 1,
+    overflow: 'hidden',
+    minHeight: '39px',
   },
-
-  priceRow: {
+  cwDivider: {
+    border: 'none',
+    borderTop: '1px solid #eaecf0',
+    margin: '0 0 16px 0',
+  },
+  cwFooter: {
     display: 'flex',
-    alignItems: 'flex-end',
     justifyContent: 'space-between',
-    borderTop: '1px solid #f3f4f6',
-    paddingTop: '14px',
-    marginTop: 'auto',
-  },
-  priceCol: { display: 'flex', flexDirection: 'column' },
-  currentPrice: {
-    fontSize: '16px',
-    fontWeight: 800,
-    letterSpacing: '-0.02em',
-    transition: 'color 0.25s ease',
-  },
-  cartButton: {
-    width: '38px',
-    height: '38px',
-    borderRadius: '10px',
-    border: '1px solid #e5e7eb',
-    display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    transition: 'all 0.25s ease',
-    flexShrink: 0,
+  },
+  cwStatLeft: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  cwStatRight: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+  },
+  cwVal: {
+    fontSize: '14px',
+    fontWeight: 600,
+    color: '#101828',
+    marginBottom: '2px',
+  },
+  cwLbl: {
+    fontSize: '11px',
+    color: '#98a2b3',
+    fontWeight: 500,
   },
 
   /* Skeleton */
   skeletonCard: {
     background: '#fff',
-    borderRadius: '16px',
+    borderRadius: '14px',
     overflow: 'hidden',
-    border: '1px solid #f3f4f6',
+    border: '1px solid #EDEDF0',
   },
   skeletonImage: {
     width: '100%',
     height: '200px',
-    background: 'linear-gradient(110deg, #f3f4f6 30%, #e5e7eb 50%, #f3f4f6 70%)',
+    background: 'linear-gradient(110deg, #F0EAFA 30%, #EDE4F9 50%, #F0EAFA 70%)',
     backgroundSize: '200% 100%',
     animation: 'shimmer 1.5s infinite',
   },
@@ -406,7 +400,7 @@ const styles = {
   },
   skeletonLine: {
     height: '14px',
-    background: '#f3f4f6',
+    background: '#F0EAFA',
     borderRadius: '6px',
   },
   skeletonFooter: {
@@ -415,25 +409,25 @@ const styles = {
     alignItems: 'center',
     marginTop: '12px',
     paddingTop: '14px',
-    borderTop: '1px solid #f3f4f6',
+    borderTop: '1px solid #F0EAFA',
   },
 
   /* Error */
   errorCard: {
     background: '#fff',
     padding: '40px',
-    borderRadius: '16px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+    borderRadius: '14px',
+    boxShadow: '0 2px 8px rgba(110,57,203,0.06)',
     textAlign: 'center',
     maxWidth: '400px',
     margin: '40px auto',
-    border: '1px solid #f3f4f6',
+    border: '1px solid #EDEDF0',
   },
   errorIcon: {
     width: '64px',
     height: '64px',
-    background: '#fef2f2',
-    color: '#ef4444',
+    background: '#FDECEA',
+    color: '#C62828',
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
@@ -443,17 +437,17 @@ const styles = {
   errorTitle: {
     fontSize: '20px',
     fontWeight: 700,
-    color: '#111827',
+    color: '#3A3541',
     margin: '0 0 8px',
   },
   errorMessage: {
     fontSize: '14px',
-    color: '#9ca3af',
+    color: '#89868D',
     margin: '0 0 24px',
   },
   errorButton: {
     padding: '12px 28px',
-    background: '#054C73',
+    background: '#6E39CB',
     color: '#fff',
     fontWeight: 600,
     borderRadius: '10px',
@@ -472,36 +466,36 @@ const styles = {
     padding: '60px 16px',
     textAlign: 'center',
     background: '#fff',
-    borderRadius: '16px',
-    border: '1px solid #f3f4f6',
+    borderRadius: '14px',
+    border: '1px solid #EDEDF0',
   },
   emptyIcon: {
     width: '80px',
     height: '80px',
-    background: '#f3f4f6',
+    background: '#EDE4F9',
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: '#d1d5db',
+    color: '#C2A1FD',
     marginBottom: '20px',
   },
   emptyTitle: {
     fontSize: '20px',
     fontWeight: 700,
-    color: '#111827',
+    color: '#3A3541',
     margin: '0 0 8px',
   },
   emptyText: {
     fontSize: '14px',
-    color: '#9ca3af',
+    color: '#89868D',
     maxWidth: '400px',
     margin: '0 0 24px',
   },
   emptyButton: {
     padding: '10px 24px',
-    background: '#DFE9F4',
-    color: '#054C73',
+    background: '#EDE4F9',
+    color: '#6E39CB',
     fontWeight: 700,
     borderRadius: '10px',
     border: 'none',

@@ -1,167 +1,125 @@
+import { Outlet } from 'react-router-dom';
+import { FiUser, FiSearch, FiPhone } from 'react-icons/fi';
+
 const authLayoutStyles = `
   .auth-layout {
     display: flex;
     min-height: 100vh;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
 
-  /* Left side - branding panel */
+  /* Left side */
   .auth-brand {
-    flex: 1;
-    background: linear-gradient(135deg, #054C73 0%, #032d45 100%);
+    width: 50%;
+    background: #2764E8;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    padding: 60px 40px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .auth-brand::before {
-    content: '';
-    position: absolute;
-    top: -120px;
-    right: -120px;
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.04);
-  }
-
-  .auth-brand::after {
-    content: '';
-    position: absolute;
-    bottom: -80px;
-    left: -80px;
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    background: rgba(184,142,47,0.1);
-  }
-
-  .auth-brand-content {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    max-width: 400px;
-  }
-
-  .auth-brand-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 28px;
-    backdrop-filter: blur(8px);
-  }
-
-  .auth-brand-icon span {
-    font-size: 28px;
+    padding: 60px 10%;
     color: #fff;
-    font-weight: 800;
-    line-height: 1;
   }
 
   .auth-brand h1 {
-    font-size: 30px;
+    font-size: 32px;
     font-weight: 700;
-    color: #fff;
-    margin: 0 0 12px;
-    letter-spacing: -0.5px;
+    margin-bottom: 40px;
+    margin-left: 20px;
   }
 
-  .auth-brand p {
-    font-size: 15px;
-    color: rgba(255,255,255,0.6);
-    margin: 0 0 40px;
-    line-height: 1.6;
-  }
-
-  .auth-brand-features {
+  .auth-feature-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    text-align: left;
+    gap: 32px;
+    max-width: 320px;
+    margin-left: 20px;
   }
 
-  .auth-feature {
+  .auth-feature-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    color: rgba(255,255,255,0.8);
-    font-size: 14px;
-    font-weight: 500;
+    gap: 16px;
   }
 
-  .auth-feature-dot {
-    width: 8px;
-    height: 8px;
+  .af-icon-circle {
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: #B88E2F;
-    flex-shrink: 0;
-  }
-
-  /* Right side - form area */
-  .auth-form-area {
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    color: #fff;
+    font-size: 20px;
+  }
+  
+  .af-icon-1 { background: #0F3B9C; }
+  .af-icon-2 { background: #1DC9B7; }
+  .af-icon-3 { background: #10C44C; }
+
+  .af-text {
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.95);
+  }
+
+  /* Right side */
+  .auth-form-area {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
     padding: 40px;
-    background: #F4F5F7;
   }
 
   .auth-form-wrapper {
     width: 100%;
-    max-width: 420px;
+    max-width: 380px;
   }
 
-  /* Responsive */
   @media (max-width: 900px) {
-    .auth-brand {
-      display: none;
-    }
-    .auth-form-area {
-      padding: 24px;
-    }
+    .auth-brand { display: none; }
   }
 `;
-
-import { Outlet } from 'react-router-dom';
 
 const AuthLayout = () => {
   return (
     <>
       <style>{authLayoutStyles}</style>
       <div className="auth-layout">
-        {/* Left branding panel */}
         <div className="auth-brand">
-          <div className="auth-brand-content">
-            <h1>Furniture Admin</h1>
-            <p>Manage your furniture store with ease. Track orders, inventory, and customers all in one place.</p>
-            <div className="auth-brand-features">
-              <div className="auth-feature">
-                <span className="auth-feature-dot"></span>
-                <span>Real-time order tracking</span>
+          <h1>How it works?</h1>
+          
+          <div className="auth-feature-list">
+            <div className="auth-feature-item">
+              <div className="af-icon-circle af-icon-1">
+                <FiUser />
               </div>
-              <div className="auth-feature">
-                <span className="auth-feature-dot"></span>
-                <span>Inventory management</span>
+              <div className="af-text">
+                Join us
               </div>
-              <div className="auth-feature">
-                <span className="auth-feature-dot"></span>
-                <span>Sales analytics & reports</span>
+            </div>
+            
+            <div className="auth-feature-item">
+              <div className="af-icon-circle af-icon-2">
+                <FiSearch />
+              </div>
+              <div className="af-text">
+                Bring your own talent pool or let us match your posts with the best ones
+              </div>
+            </div>
+            
+            <div className="auth-feature-item">
+              <div className="af-icon-circle af-icon-3">
+                <FiPhone />
+              </div>
+              <div className="af-text">
+                Get in touch with the talents with just a few clicks without cold calls or emails
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right form area */}
         <div className="auth-form-area">
           <div className="auth-form-wrapper">
             <Outlet />

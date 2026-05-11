@@ -7,7 +7,7 @@ const adminLayoutStyles = `
     display: flex;
     height: 100vh;
     background: #F4F5F7;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Lato', sans-serif;
   }
 
   .admin-main {
@@ -52,7 +52,7 @@ const adminLayoutStyles = `
     width: 100%;
     font-size: 14px;
     color: #374151;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Lato', sans-serif;
   }
 
   .admin-header-right {

@@ -232,7 +232,7 @@ const componentStyles = `
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Lato', sans-serif;
     transition: background 0.2s;
   }
   .od-print-btn:hover { background: #04395a; }

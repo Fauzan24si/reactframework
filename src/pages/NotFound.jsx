@@ -43,7 +43,7 @@ const styles = {
     justifyContent: 'center',
     background: 'linear-gradient(135deg, #F4F5F7 0%, #DFE9F4 100%)',
     padding: '24px',
-    fontFamily: "'Poppins', sans-serif",
+    fontFamily: "'Lato', sans-serif",
   },
   card: {
     background: '#fff',
